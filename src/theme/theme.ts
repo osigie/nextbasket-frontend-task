@@ -25,6 +25,10 @@ const custom = {
   contrastText: "#BDBDBD",
 };
 
+const cBackground = {
+  main: "#FAFAFA",
+};
+
 declare module "@mui/material/styles" {
   interface Palette {
     custom: Palette["primary"];
@@ -34,12 +38,22 @@ declare module "@mui/material/styles" {
   }
 }
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    cBackground: Palette["primary"];
+  }
+  interface PaletteOptions {
+    cBackground: PaletteOptions["primary"];
+  }
+}
+
 const theme = createTheme({
   palette: {
     mode: "light",
     primary,
     secondary,
     custom,
+    cBackground,
   },
   typography: {
     fontFamily: montserrat.style.fontFamily,
