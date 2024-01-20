@@ -57,6 +57,44 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: montserrat.style.fontFamily,
+    h1: {},
+    h2: {
+      fontSize: 40,
+      fontWeight: 700,
+    },
+    h3: {
+      fontSize: 24,
+      fontWeight: 700,
+    },
+    h4: {
+      fontSize: 20,
+      fontWeight: 400,
+    },
+    h5: {
+      fontSize: 16,
+      fontWeight: 700,
+    },
+    h6: {
+      fontSize: 14,
+      fontWeight: 700,
+    },
+    subtitle1: {
+      fontSize: 14,
+      fontWeight: 400,
+    },
+    subtitle2: {
+      fontSize: 12,
+      fontWeight: 400,
+    },
+    body1: {
+      fontWeight: 500,
+    },
+    body2: {},
+    button: {},
+    caption: {
+      fontSize: 30,
+      fontWeight: 400,
+    },
   },
 
   components: {},
