@@ -25,13 +25,7 @@ function Footer() {
           marginBottom: "50px",
         }}
       >
-        <Typography
-          variant="subtitle2"
-          fontWeight={700}
-          textAlign="left"
-          color="custom.main"
-          fontSize="24px"
-        >
+        <Typography variant="h3" textAlign="left" color="custom.main">
           Bandage
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -62,7 +56,13 @@ function Footer() {
         </Box>
       </Box>
 
-      <Grid container sx={{ paddingX: { xs: "45px", md: "195px" } }}>
+      <Grid
+        container
+        sx={{
+          paddingX: { xs: "45px", md: "195px" },
+          gap: { xs: "30px", sm: "0px" },
+        }}
+      >
         <Grid xs={12} sm={4} md={2} sx={{ height: "100%" }}>
           <FooterListHeader title="Company Info" />
           <List dense={false}>
@@ -100,13 +100,7 @@ function Footer() {
           </List>
         </Grid>
         <Grid sx={{ height: "100%" }} xs={12} sm={4} md={4}>
-          <Typography
-            variant="subtitle2"
-            fontWeight={700}
-            textAlign="left"
-            color="custom.main"
-            fontSize="16px"
-          >
+          <Typography variant="h5" textAlign="left" color="custom.main">
             Get In Touch
           </Typography>
 
@@ -126,10 +120,8 @@ function Footer() {
           </Box>
           <Typography
             variant="subtitle2"
-            fontWeight={400}
             textAlign="left"
             color="custom.light"
-            fontSize="12px"
             marginTop={"8px"}
           >
             Lore imp sum dolor Amit
@@ -150,10 +142,8 @@ function Footer() {
         }}
       >
         <Typography
-          variant="subtitle2"
-          fontWeight={700}
+          variant="h6"
           color="custom.light"
-          fontSize="14px"
           sx={{
             textAlign: { xs: "center", md: "left" },
           }}
