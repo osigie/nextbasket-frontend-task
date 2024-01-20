@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { Icons } from "../../Icons";
+import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../Icons";
 import { Grid } from "@mui/material";
 import { FooterListItem } from "./FooterListItem";
 import { FooterListHeader } from "./FooterListHeader";
@@ -35,7 +35,7 @@ function Footer() {
             size="small"
             aria-label="add to shopping cart"
           >
-            <Icons.facebook />
+            <FacebookIcon />
           </IconButton>
           <IconButton
             size="small"
@@ -43,7 +43,7 @@ function Footer() {
             color="primary"
             aria-label="add to shopping cart"
           >
-            <Icons.instagram />
+            <InstagramIcon />
           </IconButton>
           <IconButton
             size="small"
@@ -51,7 +51,7 @@ function Footer() {
             color="primary"
             aria-label="add to shopping cart"
           >
-            <Icons.twitter />
+            <TwitterIcon />
           </IconButton>
         </Box>
       </Box>
@@ -63,7 +63,7 @@ function Footer() {
           gap: { xs: "30px", sm: "0px" },
         }}
       >
-        <Grid xs={12} sm={4} md={2} sx={{ height: "100%" }}>
+        <Grid xs={12} sm={4} md={2} sx={{ height: "100%" }} item>
           <FooterListHeader title="Company Info" />
           <List dense={false}>
             <FooterListItem item="About Us" />
@@ -72,7 +72,7 @@ function Footer() {
             <FooterListItem item="Blog" />
           </List>
         </Grid>
-        <Grid sx={{ height: "100%" }} xs={12} sm={4} md={2}>
+        <Grid item sx={{ height: "100%" }} xs={12} sm={4} md={2}>
           <FooterListHeader title="Legal" />
           <List dense={false}>
             <FooterListItem item="About Us" />
@@ -81,7 +81,7 @@ function Footer() {
             <FooterListItem item="Blog" />
           </List>
         </Grid>
-        <Grid sx={{ height: "100%" }} xs={12} sm={4} md={2}>
+        <Grid item sx={{ height: "100%" }} xs={12} sm={4} md={2}>
           <FooterListHeader title="Features" />
           <List dense={false}>
             <FooterListItem item=" Business Marketing" />
@@ -90,7 +90,7 @@ function Footer() {
             <FooterListItem item=" Unlimited Support" />
           </List>
         </Grid>
-        <Grid sx={{ height: "100%" }} xs={12} sm={4} md={2}>
+        <Grid item sx={{ height: "100%" }} xs={12} sm={4} md={2}>
           <FooterListHeader title="Resources" />
           <List dense={false}>
             <FooterListItem item="IOS & Android" />
@@ -99,7 +99,7 @@ function Footer() {
             <FooterListItem item=" API" />
           </List>
         </Grid>
-        <Grid sx={{ height: "100%" }} xs={12} sm={4} md={4}>
+        <Grid item sx={{ height: "100%" }} xs={12} sm={4} md={4}>
           <Typography variant="h5" textAlign="left" color="custom.main">
             Get In Touch
           </Typography>
