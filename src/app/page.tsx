@@ -10,10 +10,55 @@ import BottomBanner from "@/components/segments/home/BottomBanner/BottomBanner";
 import Footer from "@/components/ui/footer/Footer";
 import FeaturedPost from "@/components/segments/home/FeaturedPost/FeaturedPost";
 import DynamicProducts from "@/components/shared/DynamicProducts/DynamicProducts";
+import { Button } from "@mui/material";
 
 export default function HomePage() {
   return (
     <>
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          gap: "30px",
+          pt: "83px",
+          mb: "98px",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Home
+        </Typography>
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Product
+        </Typography>
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Pricing
+        </Typography>
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Contact
+        </Typography>
+      </Box>
+
       <Box sx={{ padding: { xs: "8px 14px", md: "80px 147px" } }}>
         <TopProduct />
         <Typography variant="h4" textAlign="center" color="custom.light">
