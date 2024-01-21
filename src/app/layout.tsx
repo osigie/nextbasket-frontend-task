@@ -1,7 +1,9 @@
+import Header from "@/components/ui/Header/Header";
+import Navbar from "@/components/ui/Navbar/Navbar";
+import ThemeRegistry from "@/theme/EmotionCache";
+import { AppBar, Box } from "@mui/material";
 import type { Metadata } from "next";
 import "./globals.css";
-import ThemeRegistry from "@/theme/EmotionCache";
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +17,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <ThemeRegistry>
-        <body>{children}</body>
+      <ThemeRegistry>
+        <body>
+          <AppBar
+            position="fixed"
+            sx={{ backgroundColor: "cBackground.dark", boxShadow: "none" }}
+          >
+              <Header />
+              <Navbar />
+          </AppBar>
+          <Box
+            component="main"
+            sx={{
+              bgcolor: "cBackground.dark",
+              mt: { xs: "64px", md: "140px" },
+            }}
+          >
+            {children}
+          </Box>
+        </body>
       </ThemeRegistry>
     </html>
   );
