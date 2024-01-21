@@ -25,6 +25,9 @@ import "swiper/css/pagination";
 import { homeSideWidgetImageData } from "../../../../lib";
 import { Navigation, Pagination } from "swiper/modules";
 import { Grid } from "@mui/material";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 const dummyProductDetails = {
   thumbnail: singleSample,
@@ -54,6 +57,92 @@ function ProductDetail({ params }: { params: { id: string } }) {
 
   return (
     <>
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          gap: "30px",
+          pt: "83px",
+          mb: "98px",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Home
+        </Typography>
+
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Shop
+        </Typography>
+
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          About
+        </Typography>
+
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Blog
+        </Typography>
+
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Contact
+        </Typography>
+
+        <Typography
+          component="a"
+          href="/"
+          variant="caption"
+          color="custom.light"
+        >
+          Pages
+        </Typography>
+
+        <Button>
+          <PersonOutlineOutlinedIcon sx={{ fontSize: "27px" }} />
+          <Typography component="a" href="/" variant="caption" color="primary">
+            Login / Register
+          </Typography>
+        </Button>
+        <Button>
+          <SearchOutlinedIcon sx={{ fontSize: "30px" }} />
+        </Button>
+        <Button>
+          <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
+          {/* {cart.length > 1 ? cart.length : null} */}
+          {/* <span> {cart.length > 0 ? cart.length : null}</span> */}
+          <span>3</span>
+        </Button>
+
+        <Button>
+          <FavoriteBorderOutlinedIcon sx={{ fontSize: "30px" }} />
+          <span>3</span>
+          {/* <span> {wishlist.length > 0 ? wishlist.length : null}</span> */}
+        </Button>
+      </Box>
       <Box
         sx={{
           padding: { xs: "8px 14px", md: "8px 147px" },
