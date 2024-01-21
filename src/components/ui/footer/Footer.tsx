@@ -11,7 +11,7 @@ import { FooterListHeader } from "./FooterListHeader";
 
 function Footer() {
   return (
-    <>
+    <footer>
       <Box
         sx={{
           minHeight: "120px",
@@ -151,7 +151,7 @@ function Footer() {
           Made With Love By Finland All Right Reserved.
         </Typography>
       </Box>
-    </>
+    </footer>
   );
 }
 
