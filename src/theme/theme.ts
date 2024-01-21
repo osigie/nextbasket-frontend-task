@@ -27,7 +27,8 @@ const custom = {
 
 const cBackground = {
   main: "#FAFAFA",
-  light: "#E74040"
+  light: "#E74040",
+  dark: "hsla(0, 0%, 100%, 1)",
 };
 
 declare module "@mui/material/styles" {
