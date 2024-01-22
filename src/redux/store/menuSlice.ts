@@ -13,7 +13,7 @@ const initialState: initialStateType = {
 };
 
 const menuSlice = createSlice({
-  name: "cart",
+  name: "menu",
   initialState,
   reducers: {
     toggleMenuActive: (state) => {
