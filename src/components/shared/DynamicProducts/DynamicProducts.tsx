@@ -1,16 +1,12 @@
 "use client";
 
-import { CardActionArea } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-import Link from "next/link";
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { ProductsResponseT } from "../../../../typs";
-import { useGetProductsQuery } from "@/redux/services/product.service";
 import ProductCard from "../ProductCard/ProductCard";
 import { ProductCardLoader } from "../ProductCard/ProductCardLoader";
 
@@ -19,14 +15,22 @@ function DynamicProducts({
   loadMore,
   isLoading,
   isFetching,
+  isError,
   handleLoadMoreProduct,
 }: {
   isLoading?: boolean;
   isFetching?: boolean;
   products?: ProductsResponseT;
   loadMore?: boolean;
+  isError: FetchBaseQueryError | SerializedError | undefined;
   handleLoadMoreProduct?: () => void;
 }) {
+  if (isError)
+    return (
+      <Box display="flex" justifyContent="center" height="100px" padding="40px">
+        <Typography>An error occured!</Typography>
+      </Box>
+    );
   return (
     <Box sx={{ mt: "90px", mb: "24px", mx: "56px" }}>
       <Box
