@@ -1,71 +1,27 @@
 "use client";
-import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
+import { BasketIcon, HamMenuIcon, SearchIcon } from "@/components/Icons";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
+import { toggleDrawerOpen, toggleMenuActive } from "@/redux/store/menuSlice";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import Modal from "@mui/material/Modal";
-import { Title } from "@mui/icons-material";
-import { BasketIcon, HamMenuIcon, SearchIcon } from "@/components/Icons";
-import { usePathname } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
-import { toggleDrawerOpen, toggleMenuActive } from "@/redux/store/menuSlice";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import Link from "next/link";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: "80%", md: "720" },
-  height: { xs: "80%" },
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  overflow: "scroll",
-};
+import { usePathname } from "next/navigation";
 
 function Navbar() {
   const path = usePathname();
 
-  const [open, setOpen] = useState(false);
-  const [openModalWL, setOpenModalWL] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleOpenModalWL = () => setOpenModalWL(true);
-  const handleCloseModalWL = () => setOpenModalWL(false);
-
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
   const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.app.cart);
   const { wishlist } = useAppSelector((state) => state.app.wishlist);
-
-  const navBtnStyle = {
-    color: "#737373",
-    fontSize: "12px",
-    fontWeight: "bold",
-    minHeight: 0,
-    minWidth: 0,
-    padding: "6px",
-    display: "flex",
-    alignItems: "center",
-  };
 
   const rightnavBtnStyle = {
     display: "flex",
@@ -83,22 +39,22 @@ function Navbar() {
     <>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h3"
-            noWrap
-            component="a"
-            href="/"
-            color="custom.main"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              textDecoration: "none",
-            }}
-          >
-            Bandage
-          </Typography>
+          <Link href="/">
+            <Typography
+              noWrap
+              component="a"
+              color="custom.main"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontWeight: 700,
+                letterSpacing: "0.3rem",
+                textDecoration: "none",
+              }}
+            >
+              Bandage
+            </Typography>
+          </Link>
 
           <Box
             sx={{
@@ -138,7 +94,13 @@ function Navbar() {
               <IconButton
                 size="large"
                 aria-label="menu"
-                onClick={() => dispatch(toggleMenuActive())}
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                  dispatch(toggleMenuActive());
+                }}
               >
                 <HamMenuIcon />
               </IconButton>
@@ -199,21 +161,6 @@ function Navbar() {
                   Pages
                 </Typography>
               </Link>
-              {/* <Button href="#" sx={navBtnStyle}>
-                Shop <KeyboardArrowDownOutlinedIcon />
-              </Button>
-              <Button href="#" sx={navBtnStyle}>
-                About
-              </Button>
-              <Button href="#" sx={navBtnStyle}>
-                Blog
-              </Button>
-              <Button href="#" sx={navBtnStyle}>
-                Contact
-              </Button>
-              <Button href="#" sx={navBtnStyle}>
-                Pages
-              </Button> */}
             </Box>
 
             <Box
@@ -237,7 +184,7 @@ function Navbar() {
                 onClick={() => dispatch(toggleDrawerOpen("cart"))}
               >
                 <ShoppingCartOutlinedIcon />
-                <span> {cart.length > 0 ? cart.length : null}</span>
+                {cart.length}
               </Button>
 
               <Button
@@ -245,7 +192,7 @@ function Navbar() {
                 onClick={() => dispatch(toggleDrawerOpen("wishlist"))}
               >
                 <FavoriteBorderOutlinedIcon />
-                <span> {wishlist.length > 0 ? wishlist.length : null}</span>
+                {wishlist.length}
               </Button>
             </Box>
           </Box>
