@@ -51,13 +51,13 @@ function DynamicProducts({
         ))}
 
         {isFetching
-          ? Array.from({ length: 10 }).map((item) => {
+          ? Array.from({ length: 10 }).map((item, index) => {
               return (
                 <Box
                   component="li"
                   gridColumn="span 2"
                   sx={{ height: "100%", margin: "8px" }}
-                  key={item}
+                  key={index}
                 >
                   <ProductCardLoader />
                 </Box>

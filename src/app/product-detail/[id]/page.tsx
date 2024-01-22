@@ -252,23 +252,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                 </Typography>
               )}
 
-              {/* {(data?.stock as number) > 0 ? (
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  sx={{ display: "inline-block" }}
-                >
-                  In Stock
-                </Typography>
-              ) : (
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  sx={{ display: "inline-block" }}
-                >
-                  Not Available
-                </Typography>
-              )} */}
+            
             </Typography>
             <Box
               display="flex"
