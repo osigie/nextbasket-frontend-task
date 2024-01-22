@@ -2,16 +2,15 @@
 
 import DrawerItem from "@/components/shared/DrawerItem/DrawerItem";
 import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
-import { toggleDrawerOpen, toggleDrawerClose } from "@/redux/store/menuSlice";
-import { Box, Button, Drawer, IconButton, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeItem,
 } from "@/redux/store/cartSlice";
-import { FullProductT } from "../../../../typs";
+import { toggleDrawerClose } from "@/redux/store/menuSlice";
 import { removeFromWishlist } from "@/redux/store/wishlistSlice";
+import { Box, Drawer } from "@mui/material";
+import { FullProductT } from "../../../../typs";
 
 const RigtDrawer = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +33,6 @@ const RigtDrawer = () => {
               products={cart}
               deleteHandler={(id) => dispatch(removeItem(id))}
               title="Cart"
-              total={500}
             />
           </Box>
         ) : (
@@ -43,7 +41,6 @@ const RigtDrawer = () => {
               products={wishlist as FullProductT[]}
               deleteHandler={(id) => dispatch(removeFromWishlist(id))}
               title="Wishlist"
-              total={200}
               variant="wishlist"
             />
           </Box>
