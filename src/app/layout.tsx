@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { StoreProviders } from "@/redux/StoreProviders";
 import RigtDrawer from "@/components/ui/Drawer/Drawer";
+import SnackBar from "@/components/ui/SnackBar/SnackBar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,6 +41,7 @@ export default function RootLayout({
               {children}
             </Box>
           </ThemeRegistry>
+          <SnackBar />
         </StoreProviders>
       </body>
     </html>
