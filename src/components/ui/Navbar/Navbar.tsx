@@ -19,6 +19,9 @@ import Modal from "@mui/material/Modal";
 import { Title } from "@mui/icons-material";
 import { BasketIcon, HamMenuIcon, SearchIcon } from "@/components/Icons";
 import { usePathname } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
+import { toggleDrawerOpen, toggleMenuActive } from "@/redux/store/menuSlice";
+import Link from "next/link";
 
 const style = {
   position: "absolute" as "absolute",
@@ -49,13 +52,9 @@ function Navbar() {
     null
   );
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const dispatch = useAppDispatch();
+  const { cart } = useAppSelector((state) => state.app.cart);
+  const { wishlist } = useAppSelector((state) => state.app.wishlist);
 
   const navBtnStyle = {
     color: "#737373",
@@ -136,7 +135,11 @@ function Navbar() {
                 </>
               ) : null}
 
-              <IconButton size="large" aria-label="menu">
+              <IconButton
+                size="large"
+                aria-label="menu"
+                onClick={() => dispatch(toggleMenuActive())}
+              >
                 <HamMenuIcon />
               </IconButton>
             </Box>
@@ -154,13 +157,49 @@ function Navbar() {
             <Box
               sx={{
                 flexGrow: 1,
-                display: { xs: "none", md: "flex" },
+                display: {
+                  xs: "none",
+                  md: "flex",
+                  gap: "21px",
+                  alignItems: "center",
+                },
               }}
             >
-              <Button href="/" sx={navBtnStyle}>
-                Home
-              </Button>
-              <Button href="#" sx={navBtnStyle}>
+              <Link href="/">
+                <Typography variant="h6" color="custom.light">
+                  Home
+                </Typography>
+              </Link>
+              <Link href="#">
+                <Typography
+                  variant="h6"
+                  color="custom.light"
+                  sx={{ display: "flex", alignItems: "center", gap: "9px" }}
+                >
+                  Shop <KeyboardArrowDownOutlinedIcon />
+                </Typography>
+              </Link>
+              <Link href="#">
+                <Typography variant="h6" color="custom.light">
+                  About
+                </Typography>
+              </Link>
+              <Link href="#">
+                <Typography variant="h6" color="custom.light">
+                  Blog
+                </Typography>
+              </Link>
+              <Link href="#">
+                <Typography variant="h6" color="custom.light">
+                  Contact
+                </Typography>
+              </Link>
+              <Link href="#">
+                <Typography variant="h6" color="custom.light">
+                  Pages
+                </Typography>
+              </Link>
+              {/* <Button href="#" sx={navBtnStyle}>
                 Shop <KeyboardArrowDownOutlinedIcon />
               </Button>
               <Button href="#" sx={navBtnStyle}>
@@ -174,7 +213,7 @@ function Navbar() {
               </Button>
               <Button href="#" sx={navBtnStyle}>
                 Pages
-              </Button>
+              </Button> */}
             </Box>
 
             <Box
@@ -193,116 +232,25 @@ function Navbar() {
               <Button sx={rightnavBtnStyle}>
                 <SearchOutlinedIcon />
               </Button>
-              <Button sx={rightnavBtnStyle} onClick={handleOpen}>
+              <Button
+                sx={rightnavBtnStyle}
+                onClick={() => dispatch(toggleDrawerOpen("cart"))}
+              >
                 <ShoppingCartOutlinedIcon />
-                {/* <span> {cart.length > 0 ? cart.length : null}</span> */}3
+                <span> {cart.length > 0 ? cart.length : null}</span>
               </Button>
 
-              <Button sx={rightnavBtnStyle} onClick={handleOpenModalWL}>
+              <Button
+                sx={rightnavBtnStyle}
+                onClick={() => dispatch(toggleDrawerOpen("wishlist"))}
+              >
                 <FavoriteBorderOutlinedIcon />
-                {/* <span> {wishlist.length > 0 ? wishlist.length : null}</span> */}
-                3
+                <span> {wishlist.length > 0 ? wishlist.length : null}</span>
               </Button>
             </Box>
           </Box>
         </Toolbar>
       </Container>
-
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <>
-          <Box sx={style}>
-            <Typography
-              id="modal-modal-title"
-              variant="h2"
-              component="h2"
-              fontSize={"32px"}
-              fontWeight={"700"}
-              borderBottom={"1px solid #212121"}
-            >
-              Shopping Cart
-            </Typography>
-            {cart?.map((item: any) => (
-              <CartItem
-                key={item.id}
-                id={item.id}
-                image={item.image}
-                title={item.title}
-                price={item.price}
-                quantity={item.quantity}
-              />
-            ))}
-
-            <Box
-              marginTop="24px"
-              padding="8px"
-              gridTemplateColumns="repeat(12, 1fr)"
-              gap={1}
-              sx={{
-                display: { xs: "block", md: "grid" },
-              }}
-            >
-              <Box gridColumn="span 6">
-                <Typography
-                  variant="subtitle2"
-                  fontWeight={700}
-                  color="#252B42"
-                  fontSize="16px"
-                  marginBottom={"14px"}
-                >
-                  ORDER SUMMARY
-                </Typography>
-              </Box>
-              <Box gridColumn="span 6" textAlign={"right"}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight={400}
-                  color="#252B42"
-                  fontSize="16px"
-                  marginBottom={"14px"}
-                >
-                  SUBTOTAL({getTotal(cart).totalQuantity}):{" "}
-                  <strong>${getTotal(cart).totalPrice}</strong>
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </>
-      </Modal>
-
-      <Modal
-        open={openModalWL}
-        onClose={handleCloseModalWL}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <>
-          <Box sx={style}>
-            <Typography
-              id="modal-modal-title"
-              variant="h2"
-              component="h2"
-              fontSize={"32px"}
-              fontWeight={"700"}
-              borderBottom={"1px solid #212121"}
-            >
-              Wishlist
-            </Typography>
-            {wishlist?.map((item: any) => (
-              <WishlistItem
-                key={item.id}
-                id={item.id}
-                image={item.image}
-                title={item.title}
-              />
-            ))}
-          </Box>
-        </>
-      </Modal> */}
     </>
   );
 }
