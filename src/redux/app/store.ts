@@ -21,6 +21,7 @@ import { cartReducer } from "../store/cartSlice";
 import { wishlistReducer } from "../store/wishlistSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { menuReducer } from "../store/menuSlice";
+import { snackBarReducer } from "../store/snackBarSlice";
 
 const persistConfig = {
   key: "root",
@@ -37,6 +38,7 @@ export const store = configureStore({
   reducer: {
     app: persistedReducer,
     menu: menuReducer,
+    snackBar: snackBarReducer,
     [productApi.reducerPath]: productApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
