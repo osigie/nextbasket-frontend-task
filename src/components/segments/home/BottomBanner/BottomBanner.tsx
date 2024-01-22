@@ -49,7 +49,7 @@ function BottomBanner() {
         <Typography
           variant="h3"
           textAlign="center"
-          color="#23856D"
+          color="secondary.main"
           marginBottom={"30px"}
         >
           $16.48
