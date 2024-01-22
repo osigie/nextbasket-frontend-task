@@ -14,7 +14,9 @@ export const SingleWidget = ({
       <Image
         src={image}
         alt={"side widget " + index}
-        style={{ maxWidth: "100%" }}
+        height={142}
+        width={142}
+        style={{ maxWidth: "100%", width: "auto" }}
       />
     </Box>
   );
