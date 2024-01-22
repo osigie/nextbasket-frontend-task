@@ -140,8 +140,16 @@ a {
   height: 44.471px !important;
 }
 
+.swiper-button-next:hover {
+  color: #23a6f0 !important;
+}
+
 .swiper-button-prev {
   color: hsla(0, 0%, 100%, 1) !important;
   width: 24px !important;
   height: 44.471px !important;
+}
+
+.swiper-button-prev:hover {
+  color: #23a6f0 !important;
 }
