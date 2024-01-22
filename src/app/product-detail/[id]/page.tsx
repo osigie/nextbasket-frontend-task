@@ -1,12 +1,25 @@
 "use client";
 import { ColorOptions } from "@/components/segments/product-details/ColorOptions/ColorOptions";
 import Companies from "@/components/segments/product-details/Companies/Companies";
+import { Swipper } from "@/components/segments/product-details/Swipper/Swipper";
 import DynamicProducts from "@/components/shared/DynamicProducts/DynamicProducts";
 import Footer from "@/components/ui/footer/Footer";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
+import {
+  useGetProductQuery,
+  useGetProductsQuery,
+} from "@/redux/services/product.service";
+import { addToCart } from "@/redux/store/cartSlice";
+import { toggleDrawerOpen } from "@/redux/store/menuSlice";
+import { showSnackBar } from "@/redux/store/snackBarSlice";
+import { addToWishlist } from "@/redux/store/wishlistSlice";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { Grid, Skeleton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -14,28 +27,12 @@ import IconButton from "@mui/material/IconButton";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
-import productBanner from "/public/product/productBanner.png";
-import singleSample from "/public/single-sample.png";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { homeSideWidgetImageData } from "../../../../lib";
-import { Navigation, Pagination } from "swiper/modules";
-import { Grid, Skeleton } from "@mui/material";
-import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import {
-  useGetProductQuery,
-  useGetProductsQuery,
-} from "@/redux/services/product.service";
-import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
-import { addToCart } from "@/redux/store/cartSlice";
-import { addToWishlist } from "@/redux/store/wishlistSlice";
-import { toggleDrawerOpen, toggleMenuActive } from "@/redux/store/menuSlice";
+import productBanner from "/public/product/productBanner.png";
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const dispatch = useAppDispatch();
@@ -47,15 +44,15 @@ function ProductDetail({ params }: { params: { id: string } }) {
     limit: 10,
     skip: 0,
   });
+
   const breadcrumb = [
     <Link href={`/`} key="1">
-      <Typography color="primary">Home</Typography>
+      <Typography color="custom.main">Home</Typography>
     </Link>,
-    <Typography key="2" color="primary">
+    <Typography key="2" color="custom.light">
       Shop
     </Typography>,
   ];
-
   return (
     <>
       {isMenuActive ? (
@@ -106,20 +103,22 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </Button>
           <Button onClick={() => dispatch(toggleDrawerOpen("cart"))}>
             <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
-            {cart.length > 1 ? cart.length : null}
+            {cart.length}
           </Button>
 
           <Button onClick={() => dispatch(toggleDrawerOpen("wishlist"))}>
             <FavoriteBorderOutlinedIcon sx={{ fontSize: "30px" }} />
-            <span> {wishlist.length > 0 ? wishlist.length : null}</span>
+            {wishlist.length}
           </Button>
         </Box>
       ) : null}
 
       <Box
         sx={{
-          padding: { xs: "8px 14px", md: "8px 147px" },
+          padding: { xs: "34px 0 82px 0", md: "34px 147px 0 147px" },
           backgroundColor: "cBackground.main",
+          display: "flex",
+          justifyContent: { xs: "center", md: "start" },
         }}
       >
         <Stack spacing={2}>
@@ -132,80 +131,127 @@ function ProductDetail({ params }: { params: { id: string } }) {
         </Stack>
       </Box>
 
-      <Box
-        sx={{
-          padding: { xs: "8px 14px", md: "8px 147px" },
-          backgroundColor: "cBackground.main",
-        }}
-      >
-        <Grid container columnSpacing={7} rowSpacing={4}>
-          <Grid item xs={12} sm={12} md={6}>
-            {isLoading ? (
-              <Skeleton variant="rectangular" height={450} />
-            ) : (
-              <Swipper images={data?.images} />
-            )}
-
-            <Box
-              sx={{
-                marginTop: { xs: "42px", sm: "21px", md: "21px" },
-                disply: "flex",
-                alignItems: "center",
-                gap: "19px",
-                flexWrap: "wrap",
-              }}
-            >
+      {error ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          height="100px"
+          padding="40px"
+        >
+          <Typography>An error occured!</Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            padding: { xs: "48px 14px", md: "48px 147px" },
+            backgroundColor: "cBackground.main",
+          }}
+        >
+          <Grid container columnSpacing={7} rowSpacing={4}>
+            <Grid item xs={12} sm={12} md={6}>
               {isLoading ? (
-                <>
-                  <Skeleton variant="rectangular" width={100} height={75} />
-                </>
+                <Skeleton variant="rectangular" height={450} />
               ) : (
-                data?.images.map((image, index) => {
-                  return (
-                    <Image
-                      key={index}
-                      src={image}
-                      width={"100"}
-                      height={"150"}
-                      alt="product picture preview"
-                      style={{ height: "auto" }}
-                    />
-                  );
-                })
+                <Swipper images={data?.images} />
               )}
-            </Box>
-          </Grid>
 
-          <Grid
-            xs={12}
-            sm={12}
-            md={6}
-            item
-            sx={{
-              padding: "11px",
-            }}
-            key={data?.id}
-          >
-            <Typography variant="h4" color="custom.main" marginBottom={"14px"}>
-              {isLoading ? (
-                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={90} />
-              ) : (
-                data?.title
-              )}
-            </Typography>
-            <Box
+              <Box
+                sx={{
+                  marginTop: { xs: "42px", sm: "21px", md: "21px" },
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "19px",
+                }}
+              >
+                {isLoading ? (
+                  <>
+                    {Array.from({ length: 4 }).map((_, index) => {
+                      return (
+                        <Skeleton
+                          key={index}
+                          variant="rectangular"
+                          width={100}
+                          height={75}
+                          sx={{ mt: "5px" }}
+                        />
+                      );
+                    })}
+                  </>
+                ) : (
+                  data?.images.map((image, index) => {
+                    return (
+                      <Box
+                        key={index}
+                        sx={{ maxWidth: "100px", maxHeight: "75px" }}
+                      >
+                        <Image
+                          src={image}
+                          width={"100"}
+                          height={"75"}
+                          style={{ width: "100%", height: "auto" }}
+                          alt="product picture preview"
+                        />
+                      </Box>
+                    );
+                  })
+                )}
+              </Box>
+            </Grid>
+
+            <Grid
+              xs={12}
+              sm={12}
+              md={6}
+              item
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "2px",
-                marginBottom: "21px",
+                padding: "11px",
               }}
+              key={data?.id}
             >
-              <Rating name="read-only" value={data?.rating} readOnly />
               <Typography
-                variant="h6"
-                color="custom.light"
-                sx={{ display: "inline-block" }}
+                variant="h4"
+                color="custom.main"
+                marginBottom={"14px"}
+              >
+                {isLoading ? (
+                  <Skeleton
+                    variant="text"
+                    sx={{ fontSize: "1rem" }}
+                    width={90}
+                  />
+                ) : (
+                  data?.title
+                )}
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "2px",
+                  marginBottom: "21px",
+                }}
+              >
+                <Rating name="read-only" value={data?.rating} readOnly />
+                <Typography
+                  variant="h6"
+                  color="custom.light"
+                  sx={{ display: "inline-block" }}
+                >
+                  {isLoading ? (
+                    <Skeleton
+                      variant="text"
+                      sx={{ fontSize: "1rem" }}
+                      width={70}
+                    />
+                  ) : (
+                    ` ${data?.rating}  Reviews`
+                  )}
+                </Typography>
+              </Box>
+              <Typography
+                variant="h3"
+                color="custom.main"
+                marginBottom={"14px"}
               >
                 {isLoading ? (
                   <Skeleton
@@ -214,91 +260,95 @@ function ProductDetail({ params }: { params: { id: string } }) {
                     width={70}
                   />
                 ) : (
-                  ` ${data?.rating}  Reviews`
+                  ` $${data?.price}`
                 )}
               </Typography>
-            </Box>
-            <Typography variant="h3" color="custom.main" marginBottom={"14px"}>
-              {isLoading ? (
-                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={70} />
-              ) : (
-                ` $${data?.price}`
-              )}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              color="custom.light"
-              marginBottom={"14px"}
-            >
-              {"Availability : "}
+              <Box color="custom.light" marginBottom={"14px"}>
+                {"Availability : "}
 
-              {isLoading ? (
-                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={70} />
-              ) : (data?.stock as number) > 0 ? (
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  sx={{ display: "inline-block" }}
-                >
-                  In Stock
-                </Typography>
-              ) : (
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  sx={{ display: "inline-block" }}
-                >
-                  Not Available
-                </Typography>
-              )}
-
-            
-            </Typography>
-            <Box
-              display="flex"
-              borderTop="1px solid #BDBDBD"
-              paddingTop="29px"
-              marginTop="119px"
-              gap="10px"
-            >
-              {Array.from({ length: 4 }).map((_, index) => {
-                return <ColorOptions key={index} index={index} />;
-              })}
-            </Box>
-            <Box marginTop="67px" sx={{ display: "flex", gap: "5px" }}>
-              <Button variant="contained" sx={{ backgroundColor: "primary" }}>
-                Select Options
-              </Button>
-              <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                <IconButton
-                  className="icon-btn-rounded"
-                  aria-label="add to wishlist"
-                  onClick={() => {
-                    dispatch(addToWishlist(data));
-                  }}
-                >
-                  <FavoriteBorderOutlinedIcon sx={{ color: "custom.main" }} />
-                </IconButton>
-                <IconButton
-                  className="icon-btn-rounded"
-                  aria-label="add to shopping cart"
-                  onClick={() => {
-                    dispatch(addToCart(data));
-                  }}
-                >
-                  <ShoppingCartOutlinedIcon sx={{ color: "custom.main" }} />
-                </IconButton>
-                <IconButton
-                  className="icon-btn-rounded"
-                  aria-label="add to shopping cart"
-                >
-                  <RemoveRedEyeIcon sx={{ color: "custom.main" }} />
-                </IconButton>
+                {isLoading ? (
+                  <Skeleton
+                    variant="text"
+                    sx={{ fontSize: "1rem" }}
+                    width={70}
+                  />
+                ) : (data?.stock as number) > 0 ? (
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    sx={{ display: "inline-block" }}
+                  >
+                    In Stock
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    sx={{ display: "inline-block" }}
+                  >
+                    Not Available
+                  </Typography>
+                )}
               </Box>
-            </Box>
+              <Box
+                display="flex"
+                borderTop="1px solid #BDBDBD"
+                paddingTop="29px"
+                marginTop="119px"
+                gap="10px"
+              >
+                {Array.from({ length: 4 }).map((_, index) => {
+                  return <ColorOptions key={index} index={index} />;
+                })}
+              </Box>
+              <Box marginTop="67px" sx={{ display: "flex", gap: "5px" }}>
+                <Button variant="contained" sx={{ backgroundColor: "primary" }}>
+                  Select Options
+                </Button>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                  <IconButton
+                    className="icon-btn-rounded"
+                    aria-label="add to wishlist"
+                    onClick={() => {
+                      dispatch(addToWishlist(data));
+                      dispatch(
+                        showSnackBar({
+                          severity: "success",
+                          message: "Add to wishlist",
+                        })
+                      );
+                    }}
+                  >
+                    <FavoriteBorderOutlinedIcon sx={{ color: "custom.main" }} />
+                  </IconButton>
+                  <IconButton
+                    className="icon-btn-rounded"
+                    aria-label="add to shopping cart"
+                    onClick={() => {
+                      dispatch(addToCart(data));
+                      dispatch(
+                        showSnackBar({
+                          severity: "success",
+                          message: "Add to shopping cart",
+                        })
+                      );
+                    }}
+                  >
+                    <ShoppingCartOutlinedIcon sx={{ color: "custom.main" }} />
+                  </IconButton>
+                  <IconButton
+                    className="icon-btn-rounded"
+                    aria-label="Eye icon"
+                  >
+                    <RemoveRedEyeIcon sx={{ color: "custom.main" }} />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      )}
+
       <Box
         sx={{
           padding: { xs: "8px 14px", md: "8px 147px" },
@@ -400,7 +450,11 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </Typography>
           <hr />
         </Box>
-        <DynamicProducts products={products} isLoading={isLoading} />
+        <DynamicProducts
+          isError={error}
+          products={products}
+          isLoading={isLoading}
+        />
         <Companies />
       </Box>
       <Footer />
@@ -409,25 +463,3 @@ function ProductDetail({ params }: { params: { id: string } }) {
 }
 
 export default ProductDetail;
-
-const Swipper = ({ images }: { images?: string[] }) => {
-  return (
-    <Swiper
-      className="mySwiper"
-      modules={[Navigation, Pagination]}
-      navigation={true}
-      pagination={true}
-    >
-      {images?.map((image, index) => (
-        <SwiperSlide key={index}>
-          <Image
-            src={image}
-            width={506}
-            height={450}
-            alt="Picture of product"
-          />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
-};
