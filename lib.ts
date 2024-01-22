@@ -11,6 +11,7 @@ import image9 from "/public/widgetImages/image9.png";
 import featuredPost1 from "/public/featuredPost/featuredpost1.png";
 import featuredPost2 from "/public/featuredPost/featuredpost2.png";
 import featuredPost3 from "/public/featuredPost/featuredpost3.png";
+import { FullProductT, ProductT } from "./typs";
 
 export const homeSideWidgetImageData = [
   image1,
@@ -29,3 +30,21 @@ export const featuredPostArray = [
   { alt: "featuredPost2", image: featuredPost2 },
   { alt: "featuredPost3", image: featuredPost3 },
 ];
+
+export const baseUrl = "https://dummyjson.com/products";
+
+export function discountedPrice(price: number, discountPercentage: number) {
+  const discountDecimal = discountPercentage / 100.0;
+  const total = price - price * discountDecimal;
+  return total.toFixed(2);
+}
+
+export const calTotalPrice = (product: FullProductT[]) => {
+  let totalPrice = 0;
+  product.forEach((item) => {
+    const quantity = item.quantity || 1;
+    totalPrice +=
+      Number(discountedPrice(item.price, item.discountPercentage)) * quantity;
+  });
+  return totalPrice.toFixed(2);
+};
