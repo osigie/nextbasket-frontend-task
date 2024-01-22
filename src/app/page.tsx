@@ -10,7 +10,6 @@ import BottomBanner from "@/components/segments/home/BottomBanner/BottomBanner";
 import Footer from "@/components/ui/footer/Footer";
 import FeaturedPost from "@/components/segments/home/FeaturedPost/FeaturedPost";
 import DynamicProducts from "@/components/shared/DynamicProducts/DynamicProducts";
-import { Button } from "@mui/material";
 import { useGetProductsQuery } from "@/redux/services/product.service";
 import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
 import { ProductT, ProductsResponseT } from "../../typs";
@@ -19,19 +18,22 @@ import Link from "next/link";
 export default function HomePage() {
   const { isMenuActive } = useAppSelector((state) => state.menu);
 
+  const dispatch = useAppDispatch();
+
   const [productList, setProductList] = React.useState<
     ProductsResponseT | undefined
   >();
 
   const [take, setTake] = React.useState(0);
 
-  const { data, error, isLoading, refetch, isFetching } = useGetProductsQuery(
-    {
-      limit: 10,
-      skip: take,
-    },
-    {}
-  );
+  const { data, currentData, error, isLoading, refetch, isFetching } =
+    useGetProductsQuery(
+      {
+        limit: 10,
+        skip: take,
+      },
+      {}
+    );
 
   React.useEffect(() => {
     if (!take && data) {
@@ -53,6 +55,7 @@ export default function HomePage() {
       });
     });
   };
+
 
   return (
     <>
@@ -102,6 +105,7 @@ export default function HomePage() {
           Problems trying to resolve the conflict between
         </Typography>
         <DynamicProducts
+          isError={error}
           products={productList}
           isLoading={isLoading}
           loadMore={true}
@@ -142,6 +146,7 @@ export default function HomePage() {
         </Box>
       </Box>
       <BottomBanner />
+
       <Footer />
     </>
   );
