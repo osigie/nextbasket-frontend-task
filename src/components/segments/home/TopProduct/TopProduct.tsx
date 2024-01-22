@@ -29,6 +29,7 @@ const TopProduct = () => {
           <Image
             src={funiture1}
             alt="Some text"
+            placeholder="blur"
             style={{ width: "100%", height: "auto" }}
           />
           <LabelText variant="md" />
@@ -46,6 +47,7 @@ const TopProduct = () => {
                 <Image
                   src={funiture2}
                   alt="Some text"
+                  placeholder="blur"
                   style={{ width: "100%", height: "auto" }}
                 />
 
@@ -57,6 +59,7 @@ const TopProduct = () => {
                 <Image
                   src={funiture3}
                   alt="Some text"
+                  placeholder="blur"
                   style={{ width: "100%", height: "auto" }}
                 />
 
@@ -67,6 +70,7 @@ const TopProduct = () => {
               <Card sx={{ position: "relative" }}>
                 <Image
                   src={funiture4}
+                  placeholder="blur"
                   alt="Some text"
                   style={{ width: "100%", height: "auto" }}
                 />
