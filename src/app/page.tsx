@@ -2,7 +2,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import TopProduct from "@/components/segments/home/TopItems/TopProduct";
+import TopProduct from "@/components/segments/home/TopProduct/TopProduct";
 import Services from "@/components/segments/home/Services/Services";
 import Feedback from "@/components/segments/home/Feedback/Feedback";
 import SideWidget from "@/components/segments/home/SideWidget/SideWidget";
@@ -11,53 +11,79 @@ import Footer from "@/components/ui/footer/Footer";
 import FeaturedPost from "@/components/segments/home/FeaturedPost/FeaturedPost";
 import DynamicProducts from "@/components/shared/DynamicProducts/DynamicProducts";
 import { Button } from "@mui/material";
+import { useGetProductsQuery } from "@/redux/services/product.service";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
+import { ProductT, ProductsResponseT } from "../../typs";
+import Link from "next/link";
 
 export default function HomePage() {
+  const { isMenuActive } = useAppSelector((state) => state.menu);
+
+  const [productList, setProductList] = React.useState<
+    ProductsResponseT | undefined
+  >();
+
+  const [take, setTake] = React.useState(0);
+
+  const { data, error, isLoading, refetch, isFetching } = useGetProductsQuery(
+    {
+      limit: 10,
+      skip: take,
+    },
+    {}
+  );
+
+  React.useEffect(() => {
+    if (!take && data) {
+      setProductList(data);
+      setTake(10);
+    }
+  }, [take, data]);
+
+  const handleLoadMoreProduct = () => {
+    setTake((prev) => prev + 10);
+    refetch().then((newData) => {
+      setProductList((prev) => {
+        const currentProduct = newData?.data?.products as ProductT[];
+        const prevProduct = prev?.products as ProductT[];
+        return {
+          ...newData?.data,
+          products: [...prevProduct, ...currentProduct],
+        } as ProductsResponseT;
+      });
+    });
+  };
+
   return (
     <>
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          flexDirection: "column",
-          gap: "30px",
-          pt: "83px",
-          mb: "98px",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
+      {isMenuActive ? (
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            flexDirection: "column",
+            gap: "30px",
+            pt: "83px",
+            mb: "98px",
+            alignItems: "center",
+          }}
         >
-          Home
-        </Typography>
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Product
-        </Typography>
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Pricing
-        </Typography>
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Contact
-        </Typography>
-      </Box>
+          <Link href="/">
+            <Typography variant="caption" color="custom.light">
+              Home
+            </Typography>
+          </Link>
+
+          <Typography variant="caption" color="custom.light">
+            Product
+          </Typography>
+          <Typography variant="caption" color="custom.light">
+            Pricing
+          </Typography>
+          <Typography variant="caption" color="custom.light">
+            Contact
+          </Typography>
+        </Box>
+      ) : null}
 
       <Box sx={{ padding: { xs: "8px 14px", md: "80px 147px" } }}>
         <TopProduct />
@@ -75,7 +101,13 @@ export default function HomePage() {
         <Typography variant="subtitle1" textAlign="center" color="custom.light">
           Problems trying to resolve the conflict between
         </Typography>
-        <DynamicProducts />
+        <DynamicProducts
+          products={productList}
+          isLoading={isLoading}
+          loadMore={true}
+          isFetching={isFetching}
+          handleLoadMoreProduct={handleLoadMoreProduct}
+        />
 
         <Services />
         <FeaturedPost />
