@@ -1,23 +1,20 @@
-import React from "react";
-import { FullProductT, ProductT } from "../../../../typs";
-import { Box, Typography } from "@mui/material";
-import ProductCard from "../ProductCard/ProductCard";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
 import { toggleDrawerClose } from "@/redux/store/menuSlice";
-import { decreaseQuantity, increaseQuantity } from "@/redux/store/cartSlice";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Link from "next/link";
 import { calTotalPrice } from "../../../../lib";
+import { FullProductT } from "../../../../typs";
+import ProductCard from "../ProductCard/ProductCard";
 
 type Props = {
   products: FullProductT[];
   title: string;
-  total: number;
   variant?: "cart" | "wishlist";
   addHandler?: (id: number) => void;
   removeHandler?: (id: number) => void;
@@ -27,16 +24,12 @@ type Props = {
 const DrawerItem = ({
   products,
   title,
-  total,
   variant = "cart",
   addHandler,
   deleteHandler,
   removeHandler,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const { drawer, currentDrawerState } = useAppSelector((state) => state.menu);
-  const { cart } = useAppSelector((state) => state.app.cart);
-  const { wishlist } = useAppSelector((state) => state.app.wishlist);
 
   return (
     <Box
@@ -71,7 +64,10 @@ const DrawerItem = ({
       </Box>
 
       {products.length > 0 ? (
-        <Box component="ul">
+        <Box
+          component="ul"
+          sx={{ display: "flex", gap: "5px", flexDirection: "column" }}
+        >
           {products.map((product) => {
             return (
               <Box
@@ -79,7 +75,7 @@ const DrawerItem = ({
                 component="li"
                 sx={{
                   display: "flex",
-                  gap: "5px",
+                  gap: "7px",
                   border: "1px solid black",
                   padding: "5px",
                   width: "100%",
@@ -114,10 +110,9 @@ const DrawerItem = ({
                         <RemoveIcon />
                       </IconButton>
                       <Typography
-                        variant="subtitle2"
+                        variant="h5"
                         fontWeight={400}
-                        color="#252B42"
-                        fontSize="16px"
+                        color="custom.main"
                         margin={"12px"}
                       >
                         {product?.quantity}
@@ -161,12 +156,16 @@ const DrawerItem = ({
           </Link>
         </Box>
       )}
-      <Typography color="primary.main">
-        <Typography color="custom.light" sx={{ display: "inline-block" }}>
+      <Box color="primary.main">
+        <Typography
+          color="custom.light"
+          variant="h5"
+          sx={{ display: "inline-block" }}
+        >
           Total
         </Typography>
         : ${calTotalPrice(products)}
-      </Typography>
+      </Box>
     </Box>
   );
 };
