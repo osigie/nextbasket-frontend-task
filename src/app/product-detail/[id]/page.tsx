@@ -24,28 +24,29 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { homeSideWidgetImageData } from "../../../../lib";
 import { Navigation, Pagination } from "swiper/modules";
-import { Grid } from "@mui/material";
+import { Grid, Skeleton } from "@mui/material";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
-const dummyProductDetails = {
-  thumbnail: singleSample,
-  title: "Floating Phone",
-  rating: 5,
-  price: "53",
-  stock: 3,
-};
-
-type ProductDetailsT = {
-  thumbnail: StaticImageData;
-  title: string;
-  rating: number;
-  price: string;
-  stock: number;
-};
+import {
+  useGetProductQuery,
+  useGetProductsQuery,
+} from "@/redux/services/product.service";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hooks";
+import { addToCart } from "@/redux/store/cartSlice";
+import { addToWishlist } from "@/redux/store/wishlistSlice";
+import { toggleDrawerOpen, toggleMenuActive } from "@/redux/store/menuSlice";
 
 function ProductDetail({ params }: { params: { id: string } }) {
+  const dispatch = useAppDispatch();
+  const { isMenuActive } = useAppSelector((state) => state.menu);
+  const { cart } = useAppSelector((state) => state.app.cart);
+  const { wishlist } = useAppSelector((state) => state.app.wishlist);
+  const { data, error, isLoading } = useGetProductQuery(params.id);
+  const { data: products } = useGetProductsQuery({
+    limit: 10,
+    skip: 0,
+  });
   const breadcrumb = [
     <Link href={`/`} key="1">
       <Typography color="primary">Home</Typography>
@@ -57,92 +58,64 @@ function ProductDetail({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          flexDirection: "column",
-          gap: "30px",
-          pt: "83px",
-          mb: "98px",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
+      {isMenuActive ? (
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            flexDirection: "column",
+            gap: "30px",
+            pt: "83px",
+            mb: "98px",
+            alignItems: "center",
+          }}
         >
-          Home
-        </Typography>
+          <Link href="/">
+            <Typography variant="caption" color="custom.light">
+              Home
+            </Typography>
+          </Link>
 
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Shop
-        </Typography>
-
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          About
-        </Typography>
-
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Blog
-        </Typography>
-
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Contact
-        </Typography>
-
-        <Typography
-          component="a"
-          href="/"
-          variant="caption"
-          color="custom.light"
-        >
-          Pages
-        </Typography>
-
-        <Button>
-          <PersonOutlineOutlinedIcon sx={{ fontSize: "27px" }} />
-          <Typography component="a" href="/" variant="caption" color="primary">
-            Login / Register
+          <Typography variant="caption" color="custom.light">
+            Shop
           </Typography>
-        </Button>
-        <Button>
-          <SearchOutlinedIcon sx={{ fontSize: "30px" }} />
-        </Button>
-        <Button>
-          <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
-          {/* {cart.length > 1 ? cart.length : null} */}
-          {/* <span> {cart.length > 0 ? cart.length : null}</span> */}
-          <span>3</span>
-        </Button>
 
-        <Button>
-          <FavoriteBorderOutlinedIcon sx={{ fontSize: "30px" }} />
-          <span>3</span>
-          {/* <span> {wishlist.length > 0 ? wishlist.length : null}</span> */}
-        </Button>
-      </Box>
+          <Typography variant="caption" color="custom.light">
+            About
+          </Typography>
+
+          <Typography variant="caption" color="custom.light">
+            Blog
+          </Typography>
+
+          <Typography variant="caption" color="custom.light">
+            Contact
+          </Typography>
+
+          <Typography variant="caption" color="custom.light">
+            Pages
+          </Typography>
+
+          <Button>
+            <PersonOutlineOutlinedIcon sx={{ fontSize: "27px" }} />
+            <Typography variant="caption" color="primary">
+              Login / Register
+            </Typography>
+          </Button>
+          <Button>
+            <SearchOutlinedIcon sx={{ fontSize: "30px" }} />
+          </Button>
+          <Button onClick={() => dispatch(toggleDrawerOpen("cart"))}>
+            <ShoppingCartOutlinedIcon sx={{ fontSize: "30px" }} />
+            {cart.length > 1 ? cart.length : null}
+          </Button>
+
+          <Button onClick={() => dispatch(toggleDrawerOpen("wishlist"))}>
+            <FavoriteBorderOutlinedIcon sx={{ fontSize: "30px" }} />
+            <span> {wishlist.length > 0 ? wishlist.length : null}</span>
+          </Button>
+        </Box>
+      ) : null}
+
       <Box
         sx={{
           padding: { xs: "8px 14px", md: "8px 147px" },
@@ -158,6 +131,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </Breadcrumbs>
         </Stack>
       </Box>
+
       <Box
         sx={{
           padding: { xs: "8px 14px", md: "8px 147px" },
@@ -166,16 +140,39 @@ function ProductDetail({ params }: { params: { id: string } }) {
       >
         <Grid container columnSpacing={7} rowSpacing={4}>
           <Grid item xs={12} sm={12} md={6}>
-            <Swipper />
-            <Box sx={{ marginTop: { xs: "42px", sm: "21px", md: "21px" } }}>
-              <Image
-                // src={dummyProductDetails.thumbnail}
-                src={singleSample}
-                width={"100"}
-                height={"150"}
-                alt="product picture"
-                style={{ height: "auto" }}
-              />
+            {isLoading ? (
+              <Skeleton variant="rectangular" height={450} />
+            ) : (
+              <Swipper images={data?.images} />
+            )}
+
+            <Box
+              sx={{
+                marginTop: { xs: "42px", sm: "21px", md: "21px" },
+                disply: "flex",
+                alignItems: "center",
+                gap: "19px",
+                flexWrap: "wrap",
+              }}
+            >
+              {isLoading ? (
+                <>
+                  <Skeleton variant="rectangular" width={100} height={75} />
+                </>
+              ) : (
+                data?.images.map((image, index) => {
+                  return (
+                    <Image
+                      key={index}
+                      src={image}
+                      width={"100"}
+                      height={"150"}
+                      alt="product picture preview"
+                      style={{ height: "auto" }}
+                    />
+                  );
+                })
+              )}
             </Box>
           </Grid>
 
@@ -187,10 +184,14 @@ function ProductDetail({ params }: { params: { id: string } }) {
             sx={{
               padding: "11px",
             }}
-            key={dummyProductDetails.title}
+            key={data?.id}
           >
             <Typography variant="h4" color="custom.main" marginBottom={"14px"}>
-              {dummyProductDetails.title}
+              {isLoading ? (
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={90} />
+              ) : (
+                data?.title
+              )}
             </Typography>
             <Box
               sx={{
@@ -200,21 +201,29 @@ function ProductDetail({ params }: { params: { id: string } }) {
                 marginBottom: "21px",
               }}
             >
-              <Rating
-                name="read-only"
-                value={dummyProductDetails.rating}
-                readOnly
-              />
+              <Rating name="read-only" value={data?.rating} readOnly />
               <Typography
                 variant="h6"
                 color="custom.light"
                 sx={{ display: "inline-block" }}
               >
-                10 Reviews
+                {isLoading ? (
+                  <Skeleton
+                    variant="text"
+                    sx={{ fontSize: "1rem" }}
+                    width={70}
+                  />
+                ) : (
+                  ` ${data?.rating}  Reviews`
+                )}
               </Typography>
             </Box>
             <Typography variant="h3" color="custom.main" marginBottom={"14px"}>
-              ${dummyProductDetails.price}
+              {isLoading ? (
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={70} />
+              ) : (
+                ` $${data?.price}`
+              )}
             </Typography>
             <Typography
               variant="subtitle1"
@@ -222,7 +231,10 @@ function ProductDetail({ params }: { params: { id: string } }) {
               marginBottom={"14px"}
             >
               {"Availability : "}
-              {dummyProductDetails.stock > 0 ? (
+
+              {isLoading ? (
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={70} />
+              ) : (data?.stock as number) > 0 ? (
                 <Typography
                   variant="h6"
                   color="primary"
@@ -239,6 +251,24 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   Not Available
                 </Typography>
               )}
+
+              {/* {(data?.stock as number) > 0 ? (
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  sx={{ display: "inline-block" }}
+                >
+                  In Stock
+                </Typography>
+              ) : (
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  sx={{ display: "inline-block" }}
+                >
+                  Not Available
+                </Typography>
+              )} */}
             </Typography>
             <Box
               display="flex"
@@ -258,9 +288,9 @@ function ProductDetail({ params }: { params: { id: string } }) {
               <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
                 <IconButton
                   className="icon-btn-rounded"
-                  aria-label="add to shopping cart"
+                  aria-label="add to wishlist"
                   onClick={() => {
-                    console.log("Add to shopping cart");
+                    dispatch(addToWishlist(data));
                   }}
                 >
                   <FavoriteBorderOutlinedIcon sx={{ color: "custom.main" }} />
@@ -269,7 +299,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                   className="icon-btn-rounded"
                   aria-label="add to shopping cart"
                   onClick={() => {
-                    console.log("add to shopping cart");
+                    dispatch(addToCart(data));
                   }}
                 >
                   <ShoppingCartOutlinedIcon sx={{ color: "custom.main" }} />
@@ -284,9 +314,6 @@ function ProductDetail({ params }: { params: { id: string } }) {
             </Box>
           </Grid>
         </Grid>
-
-        {/* </Box> */}
-        {/* </Box> */}
       </Box>
       <Box
         sx={{
@@ -389,7 +416,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
           </Typography>
           <hr />
         </Box>
-        <DynamicProducts />
+        <DynamicProducts products={products} isLoading={isLoading} />
         <Companies />
       </Box>
       <Footer />
@@ -399,8 +426,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
 
 export default ProductDetail;
 
-const Swipper = () => {
-  const product = homeSideWidgetImageData;
+const Swipper = ({ images }: { images?: string[] }) => {
   return (
     <Swiper
       className="mySwiper"
@@ -408,7 +434,7 @@ const Swipper = () => {
       navigation={true}
       pagination={true}
     >
-      {product?.map((image, index) => (
+      {images?.map((image, index) => (
         <SwiperSlide key={index}>
           <Image
             src={image}
