@@ -8,7 +8,6 @@ type initialStateType = {
 const initialState: initialStateType = {
   wishlist: [],
 };
-
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
