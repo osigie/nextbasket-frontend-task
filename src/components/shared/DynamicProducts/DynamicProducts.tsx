@@ -1,176 +1,85 @@
 "use client";
 
-import Button from "@mui/material/Button";
+import { CardActionArea } from "@mui/material";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-import productCover from "/public/product-cover.png";
-import { StaticImageData } from "next/image";
 import Link from "next/link";
-const dummyProduct = [
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 1,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 2,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 3,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 4,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 5,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 6,
-  },
-  {
-    title: "Graphic Design",
-    price: "$16.48",
-    productCover: productCover,
-    description: "English Department",
-    productDetails: "English Department",
-    id: 7,
-  },
-];
+import { ProductsResponseT } from "../../../../typs";
+import { useGetProductsQuery } from "@/redux/services/product.service";
+import ProductCard from "../ProductCard/ProductCard";
+import { ProductCardLoader } from "../ProductCard/ProductCardLoader";
 
-type ProductT = {
-  title: string;
-  price: string;
-  productCover: StaticImageData;
-  productDetails: string;
-  description: string;
-  id: number;
-};
-
-function DynamicProducts() {
+function DynamicProducts({
+  products,
+  loadMore,
+  isLoading,
+  isFetching,
+  handleLoadMoreProduct,
+}: {
+  isLoading?: boolean;
+  isFetching?: boolean;
+  products?: ProductsResponseT;
+  loadMore?: boolean;
+  handleLoadMoreProduct?: () => void;
+}) {
   return (
     <Box sx={{ mt: "90px", mb: "24px", mx: "56px" }}>
       <Box
-        sx={{ display: { xs: "block", md: "grid" }, mt: "80px" }}
+        component="ul"
+        sx={{
+          display: { xs: "block", md: "grid" },
+          mt: "80px",
+          listStyle: "none",
+        }}
         gridTemplateColumns="repeat(10, 1fr)"
         gap={1}
       >
-        {dummyProduct?.map((product: ProductT) => (
+        {products?.products?.map((product) => (
           <Box
+            component="li"
             gridColumn="span 2"
             sx={{ height: "100%", margin: "8px" }}
             key={product.id}
           >
-            <Link href={`/products/${product.id}`}>
-              <Card
-                sx={{
-                  maxWidth: 390,
-                  height: "100%",
-                  boxShadow: "none",
-                  margin: "auto",
-                }}
-              >
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="238"
-                    // image={product.productCover}
-                    src={"/public/product-cover.png"}
-                    alt={product.description}
-                  />
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <Typography
-                      variant="subtitle2"
-                      fontWeight={700}
-                      textAlign="center"
-                      color="custom.main"
-                      fontSize="15px"
-                    >
-                      {product.title}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      textAlign="center"
-                      color="custom.light"
-                      marginTop="8px"
-                      marginBottom="8px"
-                    >
-                      {product?.productDetails}
-                    </Typography>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography
-                        variant="h5"
-                        textAlign="center"
-                        color="custom.contrastText"
-                        marginRight="4px"
-                      >
-                        ${product?.price}
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        textAlign="center"
-                        color="secondary.main"
-                      >
-                        $6.48
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Link>
+            <ProductCard product={product} isLoading={isLoading} />
           </Box>
         ))}
+
+        {isFetching
+          ? Array.from({ length: 10 }).map((item) => {
+              return (
+                <Box
+                  component="li"
+                  gridColumn="span 2"
+                  sx={{ height: "100%", margin: "8px" }}
+                  key={item}
+                >
+                  <ProductCardLoader />
+                </Box>
+              );
+            })
+          : null}
       </Box>
 
-      <Button
-        variant="outlined"
-        sx={{
-          margin: "auto",
-          display: "block",
-          mt: "40px",
-        }}
-      >
-        LOAD MORE PRODUCTS
-      </Button>
+      {products?.products?.length !== products?.total && loadMore ? (
+        <Button
+          variant="outlined"
+          sx={{
+            margin: "auto",
+            display: "block",
+            mt: "40px",
+          }}
+          onClick={handleLoadMoreProduct}
+          disabled={isLoading || isFetching}
+        >
+          LOAD MORE PRODUCTS
+        </Button>
+      ) : null}
     </Box>
   );
 }
