@@ -1,13 +1,12 @@
+import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../Icons";
-import { Grid } from "@mui/material";
-import { FooterListItem } from "./FooterListItem";
 import { FooterListHeader } from "./FooterListHeader";
+import { FooterListItem } from "./FooterListItem";
 
 function Footer() {
   return (
@@ -29,30 +28,15 @@ function Footer() {
           Bandage
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton
-            sx={{ paddingX: "0" }}
-            color="primary"
-            size="small"
-            aria-label="add to shopping cart"
-          >
-            <FacebookIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            sx={{ paddingX: "0" }}
-            color="primary"
-            aria-label="add to shopping cart"
-          >
-            <InstagramIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            sx={{ paddingX: "0" }}
-            color="primary"
-            aria-label="add to shopping cart"
-          >
-            <TwitterIcon />
-          </IconButton>
+          <a href="#">
+            <FacebookIcon color="primary" />
+          </a>
+          <a href="#">
+            <InstagramIcon color="primary" />
+          </a>
+          <a href="https://twitter.com/KenOsigie" target="_blank">
+            <TwitterIcon color="primary" />
+          </a>
         </Box>
       </Box>
 
