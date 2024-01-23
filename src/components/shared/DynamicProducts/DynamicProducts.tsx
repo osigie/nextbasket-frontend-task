@@ -40,7 +40,7 @@ function DynamicProducts({
           mt: "80px",
           listStyle: "none",
         }}
-        gridTemplateColumns="repeat(10, 1fr)"
+        gridTemplateColumns={loadMore ? "repeat(10, 1fr)" : "repeat(8, 1fr)"}
         gap={1}
       >
         {products?.products?.map((product) => (
