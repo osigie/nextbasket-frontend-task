@@ -9,23 +9,26 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
   tagTypes: ["Product"],
   endpoints: (builder) => ({
-    getProducts: builder.query<ProductsResponseT, { limit: number; skip: number }>({
-      query: ({ limit, skip }) => ({
-        url: `/?limit=${limit}&skip=${skip}`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
+    getProducts: builder.query<
+      ProductsResponseT,
+      { limit: number; take: number }
+    >({
+      query: ({ limit, take }) => `/?limit=${limit}&skip=${(take - 1) * 10}`,
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newProduct) => {
+        currentCache.products.push(...newProduct.products);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Product"],
     }),
+
     getProduct: builder.query<ProductT, string>({
       query: (id) => ({
         url: `/${id}`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
       providesTags: ["Product"],
     }),
