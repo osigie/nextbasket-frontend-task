@@ -31,7 +31,7 @@ export const featuredPostArray = [
   { alt: "featuredPost3", image: featuredPost3 },
 ];
 
-export const baseUrl = "https://dummyjson.com/products";
+export const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export function discountedPrice(price: number, discountPercentage: number) {
   const discountDecimal = discountPercentage / 100.0;
@@ -48,3 +48,6 @@ export const calTotalPrice = (product: FullProductT[]) => {
   });
   return totalPrice.toFixed(2);
 };
+
+
+
