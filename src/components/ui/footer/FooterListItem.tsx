@@ -8,6 +8,9 @@ export const FooterListItem = ({ item }: { item: string }) => {
         variant="h6"
         textAlign="left"
         color="custom.light"
+        sx={{
+          "&:hover ": { color: "primary.main" },
+        }}
       >
         {item}
       </Typography>
