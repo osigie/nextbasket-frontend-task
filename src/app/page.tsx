@@ -18,7 +18,6 @@ import Link from "next/link";
 export default function HomePage() {
   const { isMenuActive } = useAppSelector((state) => state.menu);
 
-  const dispatch = useAppDispatch();
 
   const [productList, setProductList] = React.useState<
     ProductsResponseT | undefined
