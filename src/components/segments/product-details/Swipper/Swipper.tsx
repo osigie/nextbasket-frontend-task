@@ -19,6 +19,7 @@ export const Swipper = ({ images }: { images?: string[] }) => {
             width={506}
             height={450}
             alt="Picture of product"
+            style={{ width: "506px", height: "100%" }}
           />
         </SwiperSlide>
       ))}
