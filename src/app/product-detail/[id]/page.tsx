@@ -33,6 +33,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import productBanner from "/public/product/productBanner.png";
+import { ProductsResponseT } from "../../../../typs";
 
 function ProductDetail({ params }: { params: { id: string } }) {
   const dispatch = useAppDispatch();
@@ -42,8 +43,13 @@ function ProductDetail({ params }: { params: { id: string } }) {
   const { data, error, isLoading } = useGetProductQuery(params.id);
   const { data: products } = useGetProductsQuery({
     limit: 10,
-    skip: 0,
+    take: 1,
   });
+
+  const formatedProducts = {
+    ...products,
+    products: products?.products.slice(0, 8),
+  };
 
   const breadcrumb = [
     <Link href={`/`} key="1">
@@ -188,7 +194,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
                           src={image}
                           width={"100"}
                           height={"75"}
-                          style={{ width: "100%", height: "auto" }}
+                          style={{ height: "75px", width: "100%" }}
                           alt="product picture preview"
                         />
                       </Box>
@@ -452,7 +458,7 @@ function ProductDetail({ params }: { params: { id: string } }) {
         </Box>
         <DynamicProducts
           isError={error}
-          products={products}
+          products={formatedProducts as ProductsResponseT}
           isLoading={isLoading}
         />
         <Companies />
