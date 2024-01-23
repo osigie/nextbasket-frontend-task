@@ -85,7 +85,11 @@ function Navbar() {
                   <IconButton size="large" aria-label="search">
                     <SearchIcon />
                   </IconButton>
-                  <IconButton size="large" aria-label="cart">
+                  <IconButton
+                    size="large"
+                    aria-label="cart"
+                    onClick={() => dispatch(toggleDrawerOpen("cart"))}
+                  >
                     <BasketIcon />
                   </IconButton>
                 </>
